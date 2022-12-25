@@ -1,4 +1,4 @@
-﻿namespace urele.Model
+﻿namespace urele.Client.Model
 {
 	public class LoginModel
 	{
