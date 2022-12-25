@@ -36,6 +36,7 @@
         {
             @for(int j = 0; j < linkList.Count; j++)
             {
+                var tempint = j;
                 <tr>
                     <td><a href="@(API.url+linkList[j].shortLink)"><img src="assets/img/yeniler/linkegit.png" width="35px" height="35px"></a></td>
                     <td>@linkList[j].title</td>
@@ -46,15 +47,13 @@
                     <td>@linkList[j].description</td>
                     <td><button @onclick=@(()=>clip.WriteTextAsync(API.url+linkList[j].shortLink)) id="button-green">Kopyala</button></td>
                     <td><button @onclick=@(()=>clip.WriteTextAsync(linkList[j].url)) id="button-orange">Kopyala</button></td>
-                    <td><button @onclick=@(async()=>await duzenleClick(true,j)) id="button-blue">Düzenle</button></td>
+                    <td><button @onclick=@(async()=>await duzenleClick(true,tempint)) id="button-blue">Düzenle</button></td>
                 </tr>
                 @if(duzenle == j)
                 {
-                    <tr style="height:400%;">
+                    <tr style="height:200px;">
                         <td colspan="10">
-                            HADİ BURADA YAZI OLSUN
-                            <button @onclick=@(async()=>await duzenleClick(false,0))>BAS KAPA</button>
-                            @*BURAYA KUTUCUK NESNESİ YERLEŞECEK*@
+                            <Kutucuk></Kutucuk>
                         </td>
                     </tr>
                 }
@@ -70,6 +69,8 @@
     string token;
     bool isloaded = false;
     int duzenle = -1;
+
+    int y;
 
     protected async Task duzenleClick(bool ison, int j)
     {
