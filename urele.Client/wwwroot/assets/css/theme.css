@@ -2741,25 +2741,47 @@ progress {
 }
 
 .form-control {
-  display: block;
-  width: 100%;
-  padding: 0.56rem 0.8rem;
-  font-size: 2.5rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #fff;
-  background-color: #5cd1bb;
-  background-clip: padding-box;
-  border: 1.5px solid #000;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border-radius: 0.5rem;
-  -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-  -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    display: block;
+    width: 100%;
+    padding: 0.56rem 0.8rem;
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0f0d0d;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1.5px solid #000;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.5rem;
+    -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+
+.form-control-k {
+    display: block;
+    width: 100%;
+    padding: 0.56rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0f0d0d;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1.5px solid #000;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.5rem;
+    -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2779,8 +2801,8 @@ progress {
 }
 
 .form-control:focus {
-  color: #fff;
-  background-color: #5cd1bb;
+  color: #4F5665;
+  background-color: #fff;
   border-color: #8f9db1;
   outline: 0;
   -webkit-box-shadow: 0 0 0 0.25rem rgba(31, 58, 99, 0.25);
