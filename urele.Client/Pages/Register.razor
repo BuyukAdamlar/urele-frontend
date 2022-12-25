@@ -17,38 +17,34 @@
             <form method="POST" class="register-form" id="register-form">
               <div class="form-group">
                 <label for="nickname"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                <input type="text" name="nickname" id="nickname" placeholder="Kullanıcı Adı" />
+                            <input type="text" name="nickname" id="nickname" placeholder="Kullanıcı Adı" @bind="@user.username" />
               </div>
               <div class="form-group">
                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                <input type="text" name="name" id="name" placeholder="İsim" />
+                            <input type="text" name="name" id="name" placeholder="İsim" @bind="@user.name" />
               </div>
               <div class="form-group">
                 <label for="surname"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                <input type="text" name="surname" id="surname" placeholder="Soyisim" />
+                            <input type="text" name="surname" id="surname" placeholder="Soyisim" @bind="@user.surname" />
               </div>
               <div class="form-group">
                 <label for="email"><i class="zmdi zmdi-email"></i></label>
-                <input type="email" name="email" id="email" placeholder="Email" />
+                            <input type="email" name="email" id="email" placeholder="Email" @bind="@user.email" />
               </div>
               <div class="form-group">
                 <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                <input type="password" name="pass" id="pass" placeholder="Şifre" />
-                <i class="circular eye link icon" onclick="togglePassword()"></i>
+                <input type="password" name="pass" id="pass" placeholder="Şifre" @bind="@user.password" />
+                            <i class="circular eye link icon" @onclick=@(async()=>await JS.InvokeVoidAsync("togglePassword"))></i>
               </div>
-              <script suppress-error="BL9992">
-                function togglePassword() {
-                    var element = document.getElementById('pass');
-                    element.type = (element.type == 'pass' ? 'text' : 'pass');
-                }
-              </script>
-              <div class="form-group">
-                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                <input type="password" name="re_pass" id="re_pass" placeholder="Şifreyi tekrar ediniz" />
-              </div>
-              
+                        <div class="form-group">
+                            <p style="color: red;">@errormessage</p>
+                        </div>
               <div class="form-group form-button">
-                <input type="button" name="signup" id="signup" class="form-submit" value="Kayıt Ol" />
+                            @if (!disabled)
+                            {
+                                <input type="button" name="signup" id="signup" class="form-submit" @onclick=@(async()=> await submit()) value="Kayıt Ol" />
+                            }
+                            
               </div>
             </form>
           </div>
@@ -61,11 +57,58 @@
     </section>
   </div>
 
+  @inject IJSRuntime JS
+  @inject NavigationManager navman
 @code {
     User user = new User();
-
+    string errormessage = "";
+    bool disabled = false;
     protected async Task submit()
     {
-        
+        disabled = true;
+        await InvokeAsync(StateHasChanged);
+        if (user.username == null || user.username == "")
+        {
+            errormessage = "Kullanıcı adı boş bırakılamaz";
+        }
+        else if (user.name == null || user.name == "")
+        {
+            errormessage = "İsim boş bırakılamaz";
+        }
+        else if (user.surname == null || user.surname == "")
+        {
+            errormessage = "Soyisim boş bırakılamaz";
+        }
+        else if (user.email == null || user.email == "")
+        {
+            errormessage = "Email boş bırakılamaz";
+        }
+        else if (user.password == null || user.password == "")
+        {
+            errormessage = "Şifre boş bırakılamaz";
+        }
+        else
+        {
+            var response = await RunHttp.PutReturnless("User", user);
+            if (response.isSuccess)
+            {
+                errormessage = "Lütfen mailinize gönderilen kod ile hesabınızı onaylayınız.";
+                await InvokeAsync(StateHasChanged);
+                await Task.Delay(5000);
+                navman.NavigateTo("/login");
+                return;
+            }
+            else if(response.status == System.Net.HttpStatusCode.Conflict)
+            {
+                errormessage = "Bu kullanıcı adı ya da email zaten kullanılıyor.";
+            }
+            else
+            {
+                errormessage = "Girilen bilgilerde hata mevcut. Kontrol ediniz!";
+            }
+            disabled = false;
+            await InvokeAsync(StateHasChanged);
+        }
     }
+
 }

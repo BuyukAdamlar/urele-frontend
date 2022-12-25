@@ -56,17 +56,6 @@
 	string errormessage = "";
 	bool isdisabled = false;
 
-	protected async Task togglePassword()
-	{
-		try
-		{
-			await JS.InvokeVoidAsync("togglePassword");
-		}
-		catch (Exception ex)
-		{
-		}
-	}
-
 	protected override async Task<Task> OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)

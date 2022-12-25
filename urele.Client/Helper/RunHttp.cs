@@ -49,26 +49,34 @@ namespace urele.Client.Helper
 			var response = await Http.PostAsync(url, hc);
 			return response.IsSuccessStatusCode;
 		}
-		public static async Task<HttpResult<T>> Post<T>(string url, params object[] content)
+		public static async Task<HttpResult<T>> Post<T>(string url, params object[] content) //Düzenlendi
 		{
-			HttpResponseMessage rm;
-			if (content.Length == 1)
-			{
-				rm = await Http.PostAsJsonAsync(url, content[0]);
-			}
-			else
-			{
-				rm = await Http.PostAsJsonAsync(url, content);
-			}
 			try
 			{
-				var result = await rm.Content.ReadFromJsonAsync<T>();
-				return getResult(result, rm);
+				HttpResponseMessage rm;
+				if (content.Length == 1)
+				{
+					rm = await Http.PostAsJsonAsync(url, content[0]);
+				}
+				else
+				{
+					rm = await Http.PostAsJsonAsync(url, content);
+				}
+				try
+				{
+					var result = await rm.Content.ReadFromJsonAsync<T>();
+					return getResult(result, rm);
+				}
+				catch (Exception ex)
+				{
+					return getResult<T>(rm);
+				}
 			}
-			catch (Exception ex)
+			catch (Exception e)
 			{
-				return getResult<T>(rm);
+				return getResult<T>(null);
 			}
+
 		}
 		public static async Task<HttpResult<string>> PostString(string url, params object[] content)
 		{
@@ -94,23 +102,18 @@ namespace urele.Client.Helper
 
 
 		#region Put Methods
-		public static async Task<bool> PutReturnless<T>(string url, params object[] content)
+		public static async Task<HttpResult<object>> PutReturnless(string url, params object[] content)  //Düzenlendi
 		{
-			HttpContent hc;
+			HttpResponseMessage rm;
 			if (content.Length == 1)
 			{
-				hc = new StringContent("");
-			}
-			else if (content.Length == 1)
-			{
-				hc = new StringContent(JsonSerializer.Serialize(content[0]));
+				rm = await Http.PutAsJsonAsync(url, content[0]);
 			}
 			else
 			{
-				hc = new StringContent(JsonSerializer.Serialize(content));
+				rm = await Http.PutAsJsonAsync(url, content);
 			}
-			var response = await Http.PutAsync(url, hc);
-			return response.IsSuccessStatusCode;
+			return getResult<object>(rm);
 		}
 		public static async Task<HttpResult<T>> Put<T>(string url, params object[] content)
 		{

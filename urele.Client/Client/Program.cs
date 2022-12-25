@@ -12,6 +12,7 @@ namespace urele.Client
 			builder.RootComponents.Add<App>("#app");
 			builder.RootComponents.Add<HeadOutlet>("head::after");
 			builder.Services.AddBlazoredLocalStorage();
+			builder.Services.AddScoped<ClipboardService>();
 			builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(API.url) });
 
 			await builder.Build().RunAsync();
