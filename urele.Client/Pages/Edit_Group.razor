@@ -1,0 +1,57 @@
+﻿@page "/grup_duzenle"
+
+<p id="p-header">Grup İsmi</p>
+<div class="col-md-6">
+    <p id="p-istatistik-left">Grup Üyeleri</p>
+    <table id="table-left" style="overflow-x: auto;">
+        <thead>
+            <tr>
+                <th>Sıra</th>
+                <th>Kullanıcı Adı</th>
+                <th>Kısaltılan Link Sayısı</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Ahmet</td>
+                <td>4517</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Ahmet</td>
+                <td>4517</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Ahmet</td>
+                <td>4517</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="col-md-6">
+    <p id="p-istatistik-right">Gruba Davet Et</p>
+    <div>
+        <h1>Kullanıcı Adı</h1>
+        <div style="padding: 2px;">
+            <input class="form-control" type="text"><button id="button-fıstık-ufak"
+                                                            style="margin-top: 10px;">
+                Onayla
+            </button>
+        </div>
+    </div>
+    <div>
+        <div style="padding: 2px;">
+            <h1 style="margin-top: 40px;">Gruptan Ayrıl</h1>
+            <button id="button-fıstık-ufak" style="margin-top: 1rem;">Gruptan Ayrıl</button><button id="button-red-orta" style="margin-top: 1rem; margin-left: 3rem;">
+                Eminim
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string grup { get; set; }
+}

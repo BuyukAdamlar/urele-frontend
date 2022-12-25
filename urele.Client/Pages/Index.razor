@@ -1,0 +1,82 @@
+﻿@page "/"
+
+<div style="text-align:center; margin-top: 85px;">
+    <a href="index.html"><img src="assets/img/yeniler/link.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    <a href="index.html"><img src="assets/img/yeniler/özel_link.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    <a href="index.html"><img src="assets/img/yeniler/whatsapp.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    <a href="index.html"><img src="assets/img/yeniler/telefon.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    <a href="index.html"><img src="assets/img/yeniler/mail.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    <a href="index.html"><img src="assets/img/yeniler/sms.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+</div>
+<input class="form-control" style="margin-top:10px" type="text">
+<button id="button-fıstık" style="margin-top: 20px;">Kısalt</button>
+
+<!--zart-->
+<div class="row"
+     style="margin-top:50px; margin-left: 0px; margin-right: 0px; border-radius:100px; border:#5cd1bb solid; padding: 0px;">
+    <div class="navbar" style="margin-top: 20px;">
+        <h1 class="p-istatistik" style="margin-left: 50px;">
+            Kısa Link: &nbsp<a href="/">
+                kısa
+                link
+            </a>
+        </h1>
+        <h1 class="p-istatistik" style="margin-right: 50px;">
+            Önizleme Linki: &nbsp<a href="/">önizleme linki</a>
+        </h1>
+    </div>
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1 class="p-istatistik">Uzun Link: &nbsp<a href="/">uzun link</a></h1>
+    </div>
+
+    <div class="col-md-6">
+
+        <label for="baslik" class="form-label">Link Başlığı</label>
+        <input class="form-control" type="text" name="baslik" id="baslik"
+               placeholder="Başlık giriniz" /><br>
+        <label for="bekleme" class="form-label">Bekleme Süresi</label>
+        <input class="form-control" type="text" name="bekleme" id="bekleme"
+               placeholder="Siteye girmek için beklenecek süre" /><br>
+        <label for="mesaj" class="form-label">Site Mesajı</label>
+        <input class="form-control" type="text" name="mesaj" id="mesaj"
+               placeholder="Siteye girerken gösterilecek mesaj" /><br>
+        <label for="gecerlilik" class="form-label">Geçerlilik Süresi</label>
+        <input class="form-control" type="text" name="gecerlilik" id="gecerlilik"
+               placeholder="Siteye girmek için beklenecek süre" />
+        <div style="text-align: center; margin-bottom: 15px;">
+            <button id="button-fıstık" style="width: 50%; margin-top: 30px;">
+                Düzenlemeleri
+                Onayla
+            </button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div style="margin-bottom: 166px;">
+            <h1 style="font-size: 140%;">Kullanıcılarla Paylaşma</h1>
+            <div style="padding: 2px;">
+                <label class="form-label">Kullanıcı Adı</label>
+                <input class="form-control" type="text"><button id="button-fıstık-ufak"
+                                                                style="margin-top: 10px;">
+                    Bul
+                </button>
+            </div>
+        </div>
+        <div>
+            <div style="padding: 2px;">
+                <h1 style="font-size: 140%;">Gruplarla Paylaşma</h1>
+                <label class="form-label">Grup Adı</label>
+                <select id="defaultSelect" class="form-select">
+                    <option>Grup Seçiniz</option>
+                    <option value="1">zart</option>
+                    <option value="2">zurt</option>
+                    <option value="3">pat</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code{
+	
+}

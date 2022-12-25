@@ -1,0 +1,25 @@
+﻿@page "/hesabim"
+
+<p id="p-header">Kullanıcı Adı</p>
+<div class="col-md-6">
+    <label for="name" class="form-label">İsim</label>
+    <input class="form-control" type="text" name="name" id="name" placeholder="İsminiz" /><br>
+    <label for="surname" class="form-label">Soyisim</label>
+    <input class="form-control" type="text" name="surname" id="surname" placeholder="Soyisminiz" />
+</div>
+
+<div class="col-md-6">
+    <label for="mail" class="form-label">E-Mail</label>
+    <input class="form-control" type="text" name="mail" id="mail" placeholder="Mail Adresiniz" /><br>
+    <label for="sifre" class="form-label">Şifre</label>
+    <input class="form-control" type="text" name="sifre" id="sifre" placeholder="Şifreniz" />
+</div>
+
+<div style="text-align: center;">
+    <button id="button-fıstık" style="text-align: center; margin-bottom: auto; width: 300px; height: 80px;">Onayla</button>
+</div>
+
+@code {
+    [Parameter]
+    public string hesabim { get; set; }
+}
