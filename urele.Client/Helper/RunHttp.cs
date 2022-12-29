@@ -14,11 +14,22 @@ namespace urele.Client.Helper
 			var response = await Http.GetAsync(url);
 			return response.IsSuccessStatusCode;
 		}
-		public static async Task<HttpResult<T>> Get<T>(string url)
+		public static async Task<T> Get<T>(string url) //Düzenlendi
 		{
-			var response = await Http.GetAsync(url);
-			var result = await response.Content.ReadFromJsonAsync<T>();
-			return getResult(result, response);
+			try
+			{
+				var response = await Http.GetFromJsonAsync<T>(url);
+				//var response = await Http.GetAsync(url);
+				//var result = await response.Content.ReadFromJsonAsync<T>();
+				//return getResult(result, response);
+				return response;
+
+			}
+			catch
+			{
+				return default;
+			}
+
 		}
 		public static async Task<HttpResult<string>> GetString(string url)
 		{
