@@ -4892,6 +4892,8 @@ fieldset:disabled .btn {
 }
 
 .nav-tabs .nav-link {
+  text-decoration-line: underline;
+  color:black;
   margin-bottom: -1px;
   background: none;
   border: 1px solid transparent;
@@ -18316,7 +18318,8 @@ label {
 }
 
 .terms-sidebar .nav-link.active {
-  color: #1F3A63;
+  color: #000;
+  text-decoration-line: underline;
 }
 
 .card-price {
