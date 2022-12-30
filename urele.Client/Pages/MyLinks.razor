@@ -38,14 +38,14 @@
             {
                 var tempint = j;
                 <tr>
-                    <td><a href="@(API.url+linkList[j].shortLink)"><img src="assets/img/yeniler/linkegit.png" width="35px" height="35px"></a></td>
+                    <td><a href="@(Main.url+linkList[j].shortLink)"><img src="assets/img/yeniler/linkegit.png" width="35px" height="35px"></a></td>
                     <td>@linkList[j].title</td>
                     <td>@linkList[j].clickCount</td>
                     <td>@linkList[j].createdOn</td>
                     <td>@linkList[j].expiresOn</td>
                     <td>@linkList[j].waitTime</td>
                     <td>@linkList[j].description</td>
-                    <td><button @onclick=@(()=>clip.WriteTextAsync(API.url+linkList[j].shortLink)) id="button-green">Kopyala</button></td>
+                    <td><button @onclick=@(()=>clip.WriteTextAsync(Main.url+linkList[j].shortLink)) id="button-green">Kopyala</button></td>
                     <td><button @onclick=@(()=>clip.WriteTextAsync(linkList[j].url)) id="button-orange">Kopyala</button></td>
                     <td><button @onclick=@(async()=>await duzenleClick(true,tempint)) id="button-blue">Düzenle</button></td>
                 </tr>
@@ -53,7 +53,7 @@
                 {
                     <tr style="height:200px;">
                         <td colspan="10">
-                            <Kutucuk></Kutucuk>
+                            <Kutucuk ShortLink="@linkList[duzenle].shortLink" source="mylinks" Token="@token"/>
                         </td>
                     </tr>
                 }

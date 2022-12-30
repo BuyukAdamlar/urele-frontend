@@ -18,14 +18,14 @@ namespace urele.Client.Helper
 		{
 			try
 			{
-				var response = await Http.GetFromJsonAsync<T>(url);
-				//var response = await Http.GetAsync(url);
-				//var result = await response.Content.ReadFromJsonAsync<T>();
-				//return getResult(result, response);
-				return response;
+				HttpClient _Http = new HttpClient { BaseAddress = new Uri(API.url) };
+				//var response = await Http.GetFromJsonAsync<T>(url);
+				var response = await _Http.GetAsync(url);
+				var result = await response.Content.ReadFromJsonAsync<T>();
+				return result;
 
 			}
-			catch
+			catch (Exception ex)
 			{
 				return default;
 			}
@@ -42,23 +42,26 @@ namespace urele.Client.Helper
 
 
 		#region Post Methods
-		public static async Task<bool> PostReturnless<T>(string url, params object[] content)
+		public static async Task<HttpResult<bool>> PostReturnless(string url, params object[] content) //Düzenlendi
 		{
-			HttpContent hc;
-			if (content.Length == 1)
+			try
 			{
-				hc = new StringContent("");
+				HttpResponseMessage rm;
+				if (content.Length == 1)
+				{
+					rm = await Http.PostAsJsonAsync(url, content[0]);
+				}
+				else
+				{
+					rm = await Http.PostAsJsonAsync(url, content);
+				}
+				return getResult<bool>(rm);
 			}
-			else if (content.Length == 1)
+
+			catch (Exception e)
 			{
-				hc = new StringContent(JsonSerializer.Serialize(content[0]));
+				return getResult<bool>(null);
 			}
-			else
-			{
-				hc = new StringContent(JsonSerializer.Serialize(content));
-			}
-			var response = await Http.PostAsync(url, hc);
-			return response.IsSuccessStatusCode;
 		}
 		public static async Task<HttpResult<T>> Post<T>(string url, params object[] content) //Düzenlendi
 		{

@@ -1,68 +1,284 @@
-﻿@page "/kutucuk"
+﻿@if (isloaded == true)
+{
+	<div class="row"
+	 style="margin-top:50px; margin-left: 0px; margin-right: 0px; border-radius:100px; border:#5cd1bb solid; padding: 0px;">
+		<div class="navbar" style="margin-top: 20px;">
+			<h1 class="p-istatistik" style="margin-left: 50px;">
+				Kısa Link: &nbsp<a href="/">@(Main.url + ShortLink)</a>
+			</h1>
+			<h1 class="p-istatistik" style="margin-right: 50px;">
+				Önizleme Linki: &nbsp<a href="/">@(Prew.url + ShortLink)</a>
+			</h1>
+		</div>
+		<div style="text-align: center; margin-bottom: 30px;">
+			<h1 class="p-istatistik">Uzun Link: &nbsp<a href="/">@(linkDetails.url)</a></h1>
+		</div>
 
-<div class="row"
-     style="margin-top:50px; margin-left: 0px; margin-right: 0px; border-radius:100px; border:#5cd1bb solid; padding: 0px;">
-    <div class="navbar" style="margin-top: 20px;">
-        <h1 class="p-istatistik" style="margin-left: 50px;">
-            Kısa Link: &nbsp<a href="/">
-                kısa
-                link
-            </a>
-        </h1>
-        <h1 class="p-istatistik" style="margin-right: 50px;">
-            Önizleme Linki: &nbsp<a href="/">önizleme linki</a>
-        </h1>
-    </div>
-    <div style="text-align: center; margin-bottom: 30px;">
-        <h1 class="p-istatistik">Uzun Link: &nbsp<a href="/">uzun link</a></h1>
-    </div>
+		<div class="col-md-6">
 
-    <div class="col-md-6">
+			<label for="baslik" class="form-label">Link Başlığı</label>
+			<input class="form-control-k" type="text" name="baslik" id="baslik"
+			   placeholder="Başlık giriniz" @bind="@linkDetails.title" /><br>
+			<label for="bekleme" class="form-label">Bekleme Süresi</label>
+			<input class="form-control-k" type="number" name="bekleme" id="bekleme"
+			   placeholder="Siteye girmek için beklenecek süre" @bind="@linkDetails.waitTime" /><br>
+			<label for="mesaj" class="form-label">Site Mesajı</label>
+			<input class="form-control-k" type="text" name="mesaj" id="mesaj"
+			   placeholder="Siteye girerken gösterilecek mesaj" @bind="@linkDetails.description" /><br>
+			<label for="gecerlilik" class="form-label">Geçerlilik Süresi</label>
+			<input class="form-control-k" type="text" name="gecerlilik" id="gecerlilik" @bind="@linkDetails.expiresOn" />
+			<div style="text-align: center; margin-bottom: 15px;">
+				<button id="button-fıstık-ufak" style="width: 50%; margin-top: 30px;" @onclick=@(async()=>await submit())>Düzenlemeleri Onayla</button>
+			</div>
+		</div>
 
-        <label for="baslik" class="form-label">Link Başlığı</label>
-        <input class="form-control-k" type="text" name="baslik" id="baslik"
-               placeholder="Başlık giriniz" /><br>
-        <label for="bekleme" class="form-label">Bekleme Süresi</label>
-        <input class="form-control-k" type="text" name="bekleme" id="bekleme"
-               placeholder="Siteye girmek için beklenecek süre" /><br>
-        <label for="mesaj" class="form-label">Site Mesajı</label>
-        <input class="form-control-k" type="text" name="mesaj" id="mesaj"
-               placeholder="Siteye girerken gösterilecek mesaj" /><br>
-        <label for="gecerlilik" class="form-label">Geçerlilik Süresi</label>
-        <input class="form-control-k" type="text" name="gecerlilik" id="gecerlilik"
-               placeholder="Siteye girmek için beklenecek süre" />
-        <div style="text-align: center; margin-bottom: 15px;">
-            <button id="button-fıstık-ufak" style="width: 50%; margin-top: 30px;">Düzenlemeleri Onayla</button>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div style="margin-bottom: 166px;">
-            <h1 style="font-size: 140%;">Kullanıcılarla Paylaşma</h1>
-            <div style="padding: 2px;">
-                <label class="form-label">Kullanıcı Adı</label>
-                <input class="form-control-k" type="text" placeholder="Kullanıcı adı giriniz">
-                <button id="button-fıstık-ufak"
-                                                                style="margin-top: 10px;">
-                    Bul
-                </button>
-            </div>
-        </div>
-        <div>
-            <div style="padding: 2px;">
-                <h1 style="font-size: 140%;">Gruplarla Paylaşma</h1>
-                <label class="form-label">Grup Adı</label>
-                <select id="defaultSelect" class="form-select">
-                    <option>Grup Seçiniz</option>
-                    <option value="1">zart</option>
-                    <option value="2">zurt</option>
-                    <option value="3">pat</option>
-                </select>
-            </div>
-        </div>
-    </div>
+		<div class="col-md-6">
+			@if (tokenvalid)
+			{
+				<div style="margin-bottom: 166px;">
+					<h1 style="font-size: 140%;">Kullanıcılarla Paylaşma</h1>
+					<div style="padding: 2px;">
+						<label class="form-label">Kullanıcı Adı</label>
+						@if (shareSearchStatus == 0)
+						{
+							<input class="form-control-k" type="text" placeholder="Kullanıcı adı giriniz" @bind="@searcingUsername">
+							<button id="button-fıstık-ufak" style="margin-top: 10px;" @onclick=@(async()=>await findUser())> Bul </button>
+						}
+						else if (shareSearchStatus == 1)
+						{
+							<input class="form-control-k" type="text" placeholder="Kullanıcı adı giriniz" @bind="@searcingUsername">
+							<button id="button-fıstık-ufak" style="margin-top: 10px;" @onclick=@(async()=>await findUser())> Bul </button>
+							<p style="color:red; ">Kullanıcı Bulunamadı</p>
+						}
+						else if (shareSearchStatus == 2)
+						{
+							<input class="form-control-k" type="text" placeholder="Kullanıcı adı giriniz" value="@allowedUsername">
+							<button id="button-fıstık-ufak" style="margin-top: 10px; background-color:green;" @onclick=@(async()=>await shareToUser())> Paylaş </button>
+							<p style="color:green;">Kullanıcı bulundu. Paylaşabilirsiniz!</p>
 
-</div>
+						}
+						else if (shareSearchStatus == 3)
+						{
+							<input class="form-control-k" type="text" placeholder="Kullanıcı adı giriniz" value="@searcingUsername">
+							<button id="button-fıstık-ufak" style="margin-top: 10px;" @onclick=@(async()=>await findUser())> Bul </button>
+							<p style="color:red; ">@allowedUsername ile paylaşma başarısız oldu!</p>
+						}
+						else if (shareSearchStatus == 4)
+						{
+							<input class="form-control-k" type="text" placeholder="Kullanıcı adı giriniz" value="@searcingUsername">
+							<button id="button-fıstık-ufak" style="margin-top: 10px;" @onclick=@(async()=>await findUser())> Bul </button>
+							<p style="color:green; ">@allowedUsername ile başarıyla paylaşıldı!</p>
 
+						}
+					</div>
+				</div>
+				<div>
+					<div style="padding: 2px;">
+						<h1 style="font-size: 140%;">Gruplarla Paylaşma</h1>
+						<label class="form-label">Grup Adı</label>
+						<select id="defaultSelect" class="form-select" @bind="@selectedGroupName">
+							@foreach (var item in userGroups)
+							{
+								<option value="@item">@item</option>
+							}
+						</select>
+						<button id="button-fıstık-ufak" style="margin-top: 10px;" @onclick=@(async()=>await shareToGroup())> Gruba Paylaş </button>
+						@if (shareGroupStatus == 1)
+						{
+							<p style="color:green;">@paylasilanGrupAdi Grubuna paylaştınız!</p>
+						}
+						else if (shareGroupStatus == 2)
+						{
+							<p style="color:red;">@paylasilanGrupAdi Grubuna paylaşma başarısız oldu.</p>
+						}
+					</div>
+				</div>
+			}
+		</div>
+
+	</div>
+
+}
+else if (isloaded == false)
+{
+	<h1>Yükleniyor...</h1>
+}
+else
+{
+	<h1>Yüklenirken bir sorun oluştu!</h1>
+}
+
+@inject NavigationManager navman
 @code {
+	[Parameter]
+	public string Token { get; set; } = String.Empty;
+	[Parameter]
+	public string ShortLink { get; set; } = String.Empty;
+	[Parameter]
+	public string source { get; set; } = Main.url; //Bu komponentin çağırıldığı kaynak sitesidir.
+	private bool tokenvalid = false;
+	GoShortLink linkDetails = new GoShortLink();
+	bool? isloaded = false;
 
+	string searcingUsername { get; set; } = "";
+
+	string allowedUsername = "";
+
+	int shareSearchStatus = 0;  //0 Aratma yapılmadı, 1 bulunamadı, 2 bulundu, 3 patylaşma başarısız, 4 paylaşma başarılı
+
+	List<string> userGroups = new List<string>();
+
+	string selectedGroupName = "";
+
+	int shareGroupStatus = 0; //0 İşlem yok, 1 paylaşıldı, 2 paylaşılmadı
+
+	string paylasilanGrupAdi = "";
+
+	protected override async Task<Task> OnInitializedAsync()
+	{
+		linkDetails = await RunHttp.Get<GoShortLink>(ShortLink);
+		if (linkDetails == default)
+		{
+			isloaded = null;
+			return base.OnInitializedAsync();
+		}
+		if (Token != String.Empty)
+		{
+			tokenvalid = true;
+			try
+			{
+				var res = await RunHttp.Post<List<string>>("/Group", new requestToken
+					{
+						token = Token,
+					});
+				if (res.isSuccess)
+				{
+					userGroups = res.Result;
+				}
+				else
+				{
+					userGroups = new List<string>();
+				}
+			}
+			catch
+			{
+
+			}
+		}
+		//else
+		//{
+		//    linkDetails.description = "";
+		//    linkDetails.title = "";
+		//    linkDetails.waitTime = 0;
+		//    linkDetails.
+
+		//}
+		isloaded = true;
+		return base.OnInitializedAsync();
+	}
+
+
+	protected async Task submit()
+	{
+		updateLinkOnCreating uloc = new updateLinkOnCreating()
+			{
+				waitTime = linkDetails.waitTime,
+				description = linkDetails.description,
+				expiresOn = linkDetails.expiresOn,
+				shortLink = ShortLink,
+				title = linkDetails.title
+			};
+		var res = await RunHttp.PostReturnless("/Link", uloc);
+		if (res.isSuccess)
+		{
+			if (!source.Contains(Main.url))
+			{
+				source = source.Trim();
+				if (source[0] == '/')
+				{
+					source = source.Substring(1, source.Length - 1);
+				}
+				source = Main.url + source;
+			}
+			navman.NavigateTo(source);
+		}
+		else
+		{
+			isloaded = null;
+			await InvokeAsync(StateHasChanged);
+		}
+	}
+
+	protected async Task findUser()
+	{
+		if (searcingUsername != "")
+		{
+			allowedUsername = searcingUsername;
+			var res = await RunHttp.Post<bool>("/Share/check", new checkUsernameForShare
+				{
+					username = searcingUsername,
+					token = Token
+				});
+			if (res.isSuccess)
+			{
+				shareSearchStatus = 2;
+			}
+			else
+			{
+				allowedUsername = "";
+				shareSearchStatus = 1;
+			}
+			await InvokeAsync(StateHasChanged);
+		}
+	}
+
+	protected async Task shareToUser()
+	{
+		if (allowedUsername != "")
+		{
+			requestForShareToUsers rsu = new requestForShareToUsers()
+				{
+					shortLink = ShortLink,
+					token = Token,
+					usernames = new List<string> { allowedUsername },
+				};
+			var res = await RunHttp.PostReturnless("/Share", rsu);
+			allowedUsername = "";
+			searcingUsername = "";
+			if (res.isSuccess)
+			{
+				shareSearchStatus = 4;
+			}
+			else
+			{
+				shareSearchStatus = 5;
+			}
+			await InvokeAsync(StateHasChanged);
+		}
+	}
+
+	protected async Task shareToGroup()
+	{
+		if (selectedGroupName != "")
+		{
+			paylasilanGrupAdi = selectedGroupName;
+			var res = await RunHttp.PostReturnless("/Share/group", new requestForShareToGroups
+				{
+					shortLink = ShortLink,
+					token = Token,
+					groupNames = new List<string> { paylasilanGrupAdi },
+
+				});
+
+			if (res.isSuccess)
+			{
+				shareGroupStatus = 1;
+			}
+			else
+			{
+				shareGroupStatus = 2;
+			}
+			await InvokeAsync(StateHasChanged);
+		}
+	}
 }
