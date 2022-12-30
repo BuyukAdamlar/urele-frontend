@@ -65,30 +65,7 @@ namespace urele.Client.Helper
 			}
 		}
 
-		public static async Task<HttpResult<bool>> PostReturnlessString(string url, string? content) //Düzenlendi
-		{
-			try
-			{
-				HttpResponseMessage rm;
 
-				if (content != null)
-				{
-					HttpContent httpContent = new StringContent(content);
-					rm = await Http.PostAsync(url, httpContent);
-				}
-				else
-				{
-					rm = await Http.PostAsync(url);
-				}
-
-				return getResult<bool>(rm);
-			}
-
-			catch (Exception e)
-			{
-				return getResult<bool>(null);
-			}
-		}
 		public static async Task<HttpResult<T>> Post<T>(string url, params object[] content) //Düzenlendi
 		{
 			try
