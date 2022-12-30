@@ -1,15 +1,99 @@
 ﻿@page "/"
 
 <div style="text-align:center; margin-top: 85px;">
-    <a href="index.html"><img src="assets/img/yeniler/link.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
-    <a href="index.html"><img src="assets/img/yeniler/özel_link.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
-    <a href="index.html"><img src="assets/img/yeniler/whatsapp.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
-    <a href="index.html"><img src="assets/img/yeniler/telefon.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
-    <a href="index.html"><img src="assets/img/yeniler/mail.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
-    <a href="index.html"><img src="assets/img/yeniler/sms.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    @if (type == Types.Normal)
+    {
+        <a href="index.html"><img src="assets/img/yeniler/link.png" width="120px" height="120px" style="filter: drop-shadow(0px 0px 15px #000);"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
+    else
+    {
+        <a href="index.html"><img src="assets/img/yeniler/link.png" width="120px" height="120px" @onclick=@(async()=>await selectOther(Types.Normal))> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
+    @if (type == Types.Özel)
+    {
+        <a href="index.html"><img src="assets/img/yeniler/özel_link.png" width="120px" height="120px" style="filter: drop-shadow(0px 0px 15px #000);"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
+    else
+    {
+        <a href="index.html"><img src="assets/img/yeniler/özel_link.png" width="120px" height="120px" @onclick=@(async()=>await selectOther(Types.Özel))> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
+    @if (type == Types.Whatsapp)
+    {
+        <a href="index.html"><img src="assets/img/yeniler/whatsapp.png" width="120px" height="120px" style="filter: drop-shadow(0px 0px 15px #000);"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    
+    }
+    else
+    {
+        <a href="index.html"><img src="assets/img/yeniler/whatsapp.png" width="120px" height="120px" @onclick=@(async()=>await selectOther(Types.Whatsapp))> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
+    @if (type == Types.Telefon)
+    {
+        <a href="index.html"><img src="assets/img/yeniler/telefon.png" width="120px" height="120px" style="filter: drop-shadow(0px 0px 15px #000);"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+       
+    }
+    else
+    {
+        <a href="index.html"><img src="assets/img/yeniler/telefon.png" width="120px" height="120px" @onclick=@(async()=>await selectOther(Types.Telefon))> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
+    @if (type == Types.Mail)
+    {
+        <a href="index.html"><img src="assets/img/yeniler/mail.png" width="120px" height="120px" style="filter: drop-shadow(0px 0px 15px #000);"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+        
+    }
+    else
+    {
+        <a href="index.html"><img src="assets/img/yeniler/mail.png" width="120px" height="120px" @onclick=@(async()=>await selectOther(Types.Mail))> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
+    @if (type == Types.Sms)
+    {
+        <a href="index.html"><img src="assets/img/yeniler/sms.png" width="120px" height="120px" style="filter: drop-shadow(0px 0px 15px #000);"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
+    else
+    {
+        <a href="index.html"><img src="assets/img/yeniler/sms.png" width="120px" height="120px" @onclick=@(async()=>await selectOther(Types.Sms))> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
+    }
 </div>
-<input class="form-control" style="margin-top:10px" type="text" @bind="@uzunLink">
-<button id="button-fıstık" style="margin-top: 20px;" @onclick=@(async()=>await kisaltClicked())>Kısalt</button>
+
+
+@if (type == Types.Normal)
+{
+    <input class="form-control" style="margin-top:10px" type="text" @bind="@uzunLink">
+    <button id="button-fıstık" style="margin-top: 20px;" @onclick=@(async()=>await kisaltClicked())>Kısalt</button>
+}
+else if (type == Types.Özel)
+{
+    @if (!isTokenValid)
+    {
+        <p style="color:red; font-size: 200%;">Girişi yapmadan bu özelliği kullanamazsınız!</p>
+    }
+    <input class="form-control" style="margin-top:10px" type="text" @bind="@uzunLink">
+    <p style="margin-top:10px; margin-left: 40px; margin-right:40px;">Kısa Link İçin İstediğiniz Uzantıyı Giriniz:</p>
+    @if(ozelValid)
+    {
+        <input class="form-control" style="margin-top:5px; margin-left: 40px; margin-right:40px;" type="text" value="@denenecekOzel" readonly>
+        <button id="button-fıstık" style="margin-top: 20px;" @onclick=@(async()=>await kisaltClicked())>Kısalt</button>
+    }
+    else
+    {
+        <input class="form-control" style="margin-top:5px; margin-left: 40px; margin-right:40px;" type="text" @bind="@denenecekOzel">
+        <button id="button-fıstık" style="margin-top: 20px;" @onclick=@(async()=>await checkOzel())>Kontrol Et</button>
+    }
+}
+else if (type == Types.Mail)
+{
+    <input class="form-control" style="margin-top:10px" type="email" @bind="@uzunLink">
+    <button id="button-fıstık" style="margin-top: 20px;" @onclick=@(async()=>await kisaltClicked())>Kısalt</button>
+}
+else if (type == Types.Sms || type == Types.Telefon || type == Types.Whatsapp)
+{
+    <input class="form-control" style="margin-top:10px" type="number" @bind="@uzunLink">
+    <button id="button-fıstık" style="margin-top: 20px;" @onclick=@(async()=>await kisaltClicked())>Kısalt</button>
+}
+
+
+
+
+
 
 <!--kutucuk-->
     @if (messageID == 1)
@@ -47,8 +131,10 @@
 
     Types type = Types.Normal;
 
+    bool ozelValid = false;
+    string checkedOzel = String.Empty;
 
-
+    string denenecekOzel = String.Empty;
 
     public enum Types
     {
@@ -58,6 +144,7 @@
     protected async Task selectOther(Types t)
     {
         type = t;
+        await InvokeAsync(StateHasChanged);
     }
 
     protected override async Task<Task> OnAfterRenderAsync(bool firstRender)
@@ -99,17 +186,84 @@
         {
             obj.token = Token;
         }
-        var res = await RunHttp.PutAsString("/Link", obj);
+
+        var res = new HttpResult<string>();
+        if (type == Types.Normal)
+        {
+            res = await RunHttp.PutAsString("/Link", obj);
+        }
+        else if(type == Types.Özel)
+        {
+            res = await RunHttp.PutAsString("/Link/special", new CreateSpecialModel
+            {
+					shortUrl = checkedOzel,
+                    token = Token,
+					url = longLink
+            });
+        }
+        else
+        {
+            if (isTokenValid)
+            {
+                res = await RunHttp.PutAsString("/Link/generateOther", new GenerateOtherModel
+                    {
+                        token = Token,
+                        type = (OtherTypes)this.type,
+                        value = longLink
+                    });
+            }
+            else
+            {
+                res = await RunHttp.PutAsString("/Link/generateOther", new GenerateOtherModel
+                    {
+                        type = (OtherTypes)this.type,
+                        value = longLink
+                    });
+            }
+        }
+
         if (res.isSuccess)
         {
             messageID = 1;
             ShortLink = res.Result;
-			isKutucukOpen = true;
+            isKutucukOpen = true;
         }
         else
         {
-			messageID = 2;
+            messageID = 2;
         }
-		await InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
+    }
+
+
+    protected async Task checkOzel()
+    {
+		if (denenecekOzel.Trim().Length < 1)
+		{
+			return;
+		}
+        string willcheck = denenecekOzel;
+        try
+        {
+            var res = await RunHttp.Post<bool>("Link/special/check", new CheckSpecialModel
+                {
+                    shortUrl = willcheck,
+                    token = Token
+                });
+            if (res.isSuccess)
+            {
+                if (res.Result)
+                {
+                    ozelValid = true;
+                    checkedOzel = willcheck;
+                }
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+        catch
+        {
+            
+        }
+        
     }
 }

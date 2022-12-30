@@ -1,16 +1,99 @@
-﻿@page "/scvfdhortlink"
+﻿@page "/{shortlink}"
 
 <title>Linke Yönlendiriliyor</title>
-<div id="appp" style="justify-content: center; align-items: center;"></div>    
+<div id="appp" style="justify-content: center; align-items: center;"></div>
 <div style="text-align:center;">
-    <p id="p-header">Link Adı</p>
-    <p>Link Mesajı</p>
-    <p>cart Tarafından oluşturuldu</p>
-    <a class="navbar-brand flex-center" href="/"><img class="logo" style="width:40%" src="assets/img/logo_full.png" alt="open enterprise" /></a>
+	<p>Siteye yönlendiriliyor, lütfen bekleyiniz.</p>
+	<h1 id="p-header">@countdownTimer</h1>
+	<br />
+	<p id="p-header">@linkDetails.title</p>
+	<p>@linkDetails.description</p>
+	<p>@linkDetails.creator Tarafından Oluşturuldu</p>
+	<a class="navbar-brand flex-center" href="/"><img class="logo" style="width:40%" src="assets/img/logo_full.png" alt="open enterprise" /></a>
 </div>
 
+@inject IJSRuntime JS
+@inject NavigationManager navman
 @code {
-    [Parameter]
-    public string shortlink { get; set; }
+	[Parameter]
+	public string shortlink { get; set; }
+
+	public long countdownTimer = 0;
+
+	GoShortLink linkDetails = new GoShortLink();
+
+	bool isLoaded = false;
+
+	public enum Types
+	{
+		Mail, Sms, Telefon, Whatsapp, Normal
+	}
+
+	Types type = Types.Normal;
+
+	protected override async Task<Task> OnInitializedAsync()
+	{
+		linkDetails = await RunHttp.Get<GoShortLink>(shortlink);
+		if (linkDetails == default)
+		{
+			navman.NavigateTo("/");
+		}
+		else
+		{
+			if (linkDetails.url.Contains("tel:"))
+			{
+				type = Types.Telefon;
+			}
+			else if (linkDetails.url.Contains("sms:"))
+			{
+				type = Types.Sms;
+			}
+			else if (linkDetails.url.Contains("mailto:"))
+			{
+				type = Types.Mail;
+			}
+			else if (linkDetails.url.Contains("wa.me"))
+			{
+				type = Types.Whatsapp;
+			}
+			else
+			{
+				type = Types.Normal;
+			}
+			isLoaded = true;
+			if(linkDetails.waitTime == 0)
+			{
+				navigator(linkDetails.url);
+				return base.OnInitializedAsync();
+			}
+			countdownTimer = linkDetails.waitTime;
+			backCounter();
+		}
+		return base.OnInitializedAsync();
+	}
+
+	public async Task backCounter()
+	{
+		for(long i = countdownTimer; i>=0; i--)
+		{
+			await Task.Delay(1000);
+			countdownTimer = countdownTimer - 1;
+			await InvokeAsync(StateHasChanged);
+		}
+		navigator(linkDetails.url);
+	}
+
+	public async Task navigator(string link)
+	{
+		await RunHttp.PostReturnless("Link/click", new requestToken { token = link});
+		if (type == Types.Normal || type == Types.Whatsapp)
+		{
+			if (!link.Contains("http"))
+			{
+				link = "http://"+link;
+			}
+		}
+		JS.InvokeVoidAsync("navigateToOtherSite", link);
+	}
 
 }

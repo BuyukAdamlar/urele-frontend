@@ -26,7 +26,7 @@
 			<input class="form-control-k" type="text" name="mesaj" id="mesaj"
 			   placeholder="Siteye girerken gösterilecek mesaj" @bind="@linkDetails.description" /><br>
 			<label for="gecerlilik" class="form-label">Geçerlilik Süresi</label>
-			<input class="form-control-k" type="text" name="gecerlilik" id="gecerlilik" @bind="@linkDetails.expiresOn" />
+			<input class="form-control-k" type="datetime" name="gecerlilik" id="gecerlilik" @bind="@linkDetails.expiresOn" />
 			<div style="text-align: center; margin-bottom: 15px;">
 				<button id="button-fıstık-ufak" style="width: 50%; margin-top: 30px;" @onclick=@(async()=>await submit())>Düzenlemeleri Onayla</button>
 			</div>
