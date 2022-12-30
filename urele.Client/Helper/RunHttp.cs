@@ -14,11 +14,23 @@ namespace urele.Client.Helper
 			var response = await Http.GetAsync(url);
 			return response.IsSuccessStatusCode;
 		}
-		public static async Task<HttpResult<T>> Get<T>(string url)
+		public static async Task<T> Get<T>(string url) //Düzenlendi
 		{
-			var response = await Http.GetAsync(url);
-			var result = await response.Content.ReadFromJsonAsync<T>();
-			return getResult(result, response);
+			try
+			{
+				HttpClient _Http = new HttpClient { BaseAddress = new Uri(API.url) };
+				//var response = await Http.GetFromJsonAsync<T>(url);
+				var response = await _Http.GetAsync(url);
+				var json = await response.Content.ReadAsStringAsync();
+				var result = JsonSerializer.Deserialize<T>(json);
+				return result;
+
+			}
+			catch (Exception ex)
+			{
+				return default;
+			}
+
 		}
 		public static async Task<HttpResult<string>> GetString(string url)
 		{
@@ -31,23 +43,51 @@ namespace urele.Client.Helper
 
 
 		#region Post Methods
-		public static async Task<bool> PostReturnless<T>(string url, params object[] content)
+		public static async Task<HttpResult<bool>> PostReturnless(string url, params object[] content) //Düzenlendi
 		{
-			HttpContent hc;
-			if (content.Length == 1)
+			try
 			{
-				hc = new StringContent("");
+				HttpResponseMessage rm;
+				if (content.Length == 1)
+				{
+					rm = await Http.PostAsJsonAsync(url, content[0]);
+				}
+				else
+				{
+					rm = await Http.PostAsJsonAsync(url, content);
+				}
+				return getResult<bool>(rm);
 			}
-			else if (content.Length == 1)
+
+			catch (Exception e)
 			{
-				hc = new StringContent(JsonSerializer.Serialize(content[0]));
+				return getResult<bool>(null);
 			}
-			else
+		}
+
+		public static async Task<HttpResult<bool>> PostReturnlessString(string url, string? content) //Düzenlendi
+		{
+			try
 			{
-				hc = new StringContent(JsonSerializer.Serialize(content));
+				HttpResponseMessage rm;
+
+				if (content != null)
+				{
+					HttpContent httpContent = new StringContent(content);
+					rm = await Http.PostAsync(url, httpContent);
+				}
+				else
+				{
+					rm = await Http.PostAsync(url);
+				}
+
+				return getResult<bool>(rm);
 			}
-			var response = await Http.PostAsync(url, hc);
-			return response.IsSuccessStatusCode;
+
+			catch (Exception e)
+			{
+				return getResult<bool>(null);
+			}
 		}
 		public static async Task<HttpResult<T>> Post<T>(string url, params object[] content) //Düzenlendi
 		{
@@ -115,43 +155,62 @@ namespace urele.Client.Helper
 			}
 			return getResult<object>(rm);
 		}
-		public static async Task<HttpResult<T>> Put<T>(string url, params object[] content)
+		public static async Task<HttpResult<T>> Put<T>(string url, params object[] content) //Düzenlendi
 		{
-			HttpContent hc;
-			if (content.Length == 1)
+			try
 			{
-				hc = new StringContent("");
+				HttpResponseMessage rm;
+				if (content.Length == 1)
+				{
+					rm = await Http.PutAsJsonAsync(url, content[0]);
+				}
+				else
+				{
+					rm = await Http.PutAsJsonAsync(url, content);
+				}
+				try
+				{
+					var json = await rm.Content.ReadAsStringAsync();
+					var result = JsonSerializer.Deserialize<T>(json);
+					return getResult(result, rm);
+				}
+				catch (Exception p)
+				{
+					return getResult<T>(rm);
+				}
 			}
-			else if (content.Length == 1)
+			catch (Exception e)
 			{
-				hc = new StringContent(JsonSerializer.Serialize(content[0]));
+				return getResult<T>(null);
 			}
-			else
-			{
-				hc = new StringContent(JsonSerializer.Serialize(content));
-			}
-			var response = await Http.PutAsync(url, hc);
-			var result = await response.Content.ReadFromJsonAsync<T>();
-			return getResult(result, response);
 		}
-		public static async Task<HttpResult<string>> PutString(string url, params object[] content)
+		public static async Task<HttpResult<string>> PutAsString(string url, params object[] content) //Düzenlendi
 		{
-			HttpContent hc;
-			if (content.Length == 1)
+			try
 			{
-				hc = new StringContent("");
+				HttpResponseMessage rm;
+				if (content.Length == 1)
+				{
+					rm = await Http.PutAsJsonAsync(url, content[0]);
+				}
+				else
+				{
+					rm = await Http.PutAsJsonAsync(url, content);
+				}
+				try
+				{
+					var result = await rm.Content.ReadAsStringAsync();
+					return getResult(result, rm);
+				}
+				catch (Exception p)
+				{
+					return getResult<string>(rm);
+				}
 			}
-			else if (content.Length == 1)
+			catch (Exception e)
 			{
-				hc = new StringContent(JsonSerializer.Serialize(content[0]));
+				return getResult<string>(null);
 			}
-			else
-			{
-				hc = new StringContent(JsonSerializer.Serialize(content));
-			}
-			var response = await Http.PutAsync(url, hc);
-			var result = await response.Content.ReadAsStringAsync();
-			return getResult(result, response);
 		}
 		#endregion
 

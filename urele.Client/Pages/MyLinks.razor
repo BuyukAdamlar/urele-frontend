@@ -2,17 +2,19 @@
 @inject ClipboardService clip
 
 <title>Linklerim</title>
-<button id="button-fıstık">Yeni Link Kısalt</button>
+<div style="text-align:center;">
+    <button id="button-fıstık" style="width:50%;">Yeni Link Kısalt</button>
+</div>
 <div style="text-align: center;">
     <ul class="navbar">
-        <li class="nav-link fs-2 fw-medium">
-            <a class="nav-link fs-2 fw-medium" href=/mylinks><i class="bx bx-user me-1"></i>Kendi Oluşturduklarım</a>
+        <li class="nav-link fs-2 fw-medium" style="color:black;">
+            <a class="nav-link-active fs-2 fw-medium" href=/mylinks><i class="bx bx-user me-1"></i>Kendi Oluşturduklarım</a>
         </li>
-        <li class="nav-link fs-2 fw-medium">
-            <a class="nav-link fs-2 fw-medium" href=/mylinks><i class="bx bx-user me-1"></i>Benimle Paylaşılanlar</a>
+        <li class="nav-link fs-2 fw-medium" style="color:black;">
+            <a class="nav-link fs-2 fw-medium" href=/shlinks><i class="bx bx-user me-1"></i>Benimle Paylaşılanlar</a>
         </li>
-        <li class="nav-link fs-2 fw-medium">
-            <a class="nav-link fs-2 fw-medium" href=/mylinks><i class="bx bx-user me-1"></i>Grupla Paylaşılanlar</a>
+        <li class="nav-link fs-2 fw-medium" style="color:black;">
+            <a class="nav-link fs-2 fw-medium" href=/grlinks><i class="bx bx-user me-1"></i>Grupla Paylaşılanlar</a>
         </li>
     </ul>
 </div>
@@ -36,25 +38,24 @@
         {
             @for(int j = 0; j < linkList.Count; j++)
             {
+                var tempint = j;
                 <tr>
-                    <td><a href="@(API.url+linkList[j].shortLink)"><img src="assets/img/yeniler/linkegit.png" width="35px" height="35px"></a></td>
+                    <td><a href="@(Main.url+linkList[j].shortLink)"><img src="assets/img/yeniler/linkegit.png" width="35px" height="35px"></a></td>
                     <td>@linkList[j].title</td>
                     <td>@linkList[j].clickCount</td>
                     <td>@linkList[j].createdOn</td>
                     <td>@linkList[j].expiresOn</td>
                     <td>@linkList[j].waitTime</td>
                     <td>@linkList[j].description</td>
-                    <td><button @onclick=@(()=>clip.WriteTextAsync(API.url+linkList[j].shortLink)) id="button-green">Kopyala</button></td>
+                    <td><button @onclick=@(()=>clip.WriteTextAsync(Main.url+linkList[j].shortLink)) id="button-fıstık-tablo">Kopyala</button></td>
                     <td><button @onclick=@(()=>clip.WriteTextAsync(linkList[j].url)) id="button-orange">Kopyala</button></td>
-                    <td><button @onclick=@(async()=>await duzenleClick(true,j)) id="button-blue">Düzenle</button></td>
+                    <td><button @onclick=@(async()=>await duzenleClick(true,tempint)) id="button-blue">Düzenle</button></td>
                 </tr>
                 @if(duzenle == j)
                 {
-                    <tr style="height:400%;">
+                    <tr style="height:200px;">
                         <td colspan="10">
-                            HADİ BURADA YAZI OLSUN
-                            <button @onclick=@(async()=>await duzenleClick(false,0))>BAS KAPA</button>
-                            @*BURAYA KUTUCUK NESNESİ YERLEŞECEK*@
+                            <Kutucuk ShortLink="@linkList[duzenle].shortLink" source="mylinks" Token="@token"/>
                         </td>
                     </tr>
                 }
@@ -70,6 +71,8 @@
     string token;
     bool isloaded = false;
     int duzenle = -1;
+
+    int y;
 
     protected async Task duzenleClick(bool ison, int j)
     {

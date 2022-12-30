@@ -369,11 +369,10 @@ td {
 }
 
 tr {
-  border-color: inherit;
-  border-style: solid;
-  border-width: 0;
-  border-color: #c9c9c9;
-  border: solid 1px;
+    border-style: solid;
+    border-width: 0;
+    border-color: #5cd1bb;
+    border: solid 1px;
 }
 
 thead,
@@ -384,6 +383,9 @@ th {
   border-color: inherit;
   border-style: solid;
   border-width: 0;
+}
+tr {
+    border-color: #5cd1bb;
 }
 
 label {
@@ -481,20 +483,28 @@ button {
   color: #31AA27;
 }
 
+#button-fıstık-tablo {
+    border-color: #5cd1bb;
+    border-radius: 999px;
+    background-color: #5cd1bb;
+    color: #ffffff;
+    width: 113px;
+}
+
 #button-orange {
-  border-color: #FFF4E4;
-  width: 113px;
-  border-radius: 12px;
-  background-color: #FFF4E4;
-  color: #E99518;
+    border-color: #ffbb56;
+    border-radius: 999px;
+    background-color: #ffbb56;
+    color: #fff;
+    width: 113px;
 }
 
 #button-blue {
-  border-color: #EDEDFE;
-  width: 113px;
-  border-radius: 12px;
-  background-color: #EDEDFE;
-  color: #605DEC;
+    border-color: #9090ff;
+    width: 113px;
+    border-radius: 12px;
+    background-color: #9090ff;
+    color: #fff;
 }
 
 #button-red {
@@ -2741,25 +2751,47 @@ progress {
 }
 
 .form-control {
-  display: block;
-  width: 100%;
-  padding: 0.56rem 0.8rem;
-  font-size: 2.5rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #fff;
-  background-color: #5cd1bb;
-  background-clip: padding-box;
-  border: 1.5px solid #000;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border-radius: 0.5rem;
-  -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-  transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-  -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    display: block;
+    width: 100%;
+    padding: 0.56rem 0.8rem;
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0f0d0d;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1.5px solid #000;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.5rem;
+    -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+}
+
+.form-control-k {
+    display: block;
+    width: 100%;
+    padding: 0.56rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #0f0d0d;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1.5px solid #000;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.5rem;
+    -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2779,8 +2811,8 @@ progress {
 }
 
 .form-control:focus {
-  color: #fff;
-  background-color: #5cd1bb;
+  color: #4F5665;
+  background-color: #fff;
   border-color: #8f9db1;
   outline: 0;
   -webkit-box-shadow: 0 0 0 0.25rem rgba(31, 58, 99, 0.25);
@@ -4870,6 +4902,8 @@ fieldset:disabled .btn {
 }
 
 .nav-tabs .nav-link {
+  text-decoration-line: underline;
+  color:black;
   margin-bottom: -1px;
   background: none;
   border: 1px solid transparent;
@@ -18294,7 +18328,8 @@ label {
 }
 
 .terms-sidebar .nav-link.active {
-  color: #1F3A63;
+  color: #000;
+  text-decoration-line: underline;
 }
 
 .card-price {

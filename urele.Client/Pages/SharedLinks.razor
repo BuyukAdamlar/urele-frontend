@@ -1,0 +1,120 @@
+﻿@page "/shlinks"
+@inject ClipboardService clip
+
+<title>Linklerim</title>
+<div style="text-align:center;">
+    <button id="button-fıstık" style="width:50%;">Yeni Link Kısalt</button>
+</div>
+<div style="text-align: center;">
+    <ul class="navbar">
+        <li class="nav-link fs-2 fw-medium" style="color:black;">
+            <a class="nav-link fs-2 fw-medium" href=/mylinks><i class="bx bx-user me-1"></i>Kendi Oluşturduklarım</a>
+        </li>
+        <li class="nav-link fs-2 fw-medium" style="color:black;">
+            <a class="nav-link-active fs-2 fw-medium" href=/shlinks><i class="bx bx-user me-1"></i>Benimle Paylaşılanlar</a>
+        </li>
+        <li class="nav-link fs-2 fw-medium" style="color:black;">
+            <a class="nav-link fs-2 fw-medium" href=/grlinks><i class="bx bx-user me-1"></i>Grupla Paylaşılanlar</a>
+        </li>
+    </ul>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Link İsmi</th>
+            <th>Tıklanma Sayısı</th>
+            <th>Oluşturma Tarihi</th>
+            <th>Son Geçerlilik Tarihi</th>
+            <th>Bekleme Süresi (saniye)</th>
+            <th>Link Mesajı</th>
+            <th>Kısa Link</th>
+            <th>Orijinal Link</th>
+            <th>Düzenle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (isloaded)
+        {
+            @for(int j = 0; j < linkList.Count; j++)
+            {
+                var tempint = j;
+                <tr>
+                    <td><a href="@(Main.url+linkList[j].shortLink)"><img src="assets/img/yeniler/linkegit.png" width="35px" height="35px"></a></td>
+                    <td>@linkList[j].title</td>
+                    <td>@linkList[j].clickCount</td>
+                    <td>@linkList[j].createdOn</td>
+                    <td>@linkList[j].expiresOn</td>
+                    <td>@linkList[j].waitTime</td>
+                    <td>@linkList[j].description</td>
+                    <td><button @onclick=@(()=>clip.WriteTextAsync(Main.url+linkList[j].shortLink)) id="button-fıstık-tablo">Kopyala</button></td>
+                    <td><button @onclick=@(()=>clip.WriteTextAsync(linkList[j].url)) id="button-orange">Kopyala</button></td>
+                    <td><button @onclick=@(async()=>await duzenleClick(true,tempint)) id="button-blue">Düzenle</button></td>
+                </tr>
+                @if(duzenle == j)
+                {
+                    <tr style="height:200px;">
+                        <td colspan="10">
+                            <Kutucuk></Kutucuk>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+@inject ILocalStorageService localstorage
+@inject NavigationManager navman
+@code {
+    List<Link> linkList = new List<Link>();
+    string token;
+    bool isloaded = false;
+    int duzenle = -1;
+
+    int y;
+
+    protected async Task duzenleClick(bool ison, int j)
+    {
+        if (ison)
+        {
+            duzenle = j;
+        }
+        else
+        {
+            duzenle = -1;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    
+    protected override async Task<Task> OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            token = await localstorage.GetItemAsStringAsync("token");
+            if (token == null || token == String.Empty || token.Trim() == "")
+            {
+                navman.NavigateTo("/login");
+            }
+        }
+        catch
+        {
+            navman.NavigateTo("/login");
+        }
+        try
+        {
+            var res = await RunHttp.Post<List<Link>>("Link/user", new requestToken{ token = this.token });
+            if (res.isSuccess)
+            {
+                linkList = res.Result;
+                isloaded = true;
+				await InvokeAsync(StateHasChanged);
+            }
+        }
+		catch (Exception ex)
+		{
+		}
+        return base.OnAfterRenderAsync(firstRender);
+    }
+}
