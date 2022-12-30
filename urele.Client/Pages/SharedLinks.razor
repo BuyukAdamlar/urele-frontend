@@ -2,7 +2,9 @@
 @inject ClipboardService clip
 
 <title>Linklerim</title>
-<button id="button-fıstık">Yeni Link Kısalt</button>
+<div style="text-align:center;">
+    <button id="button-fıstık" style="width:50%;">Yeni Link Kısalt</button>
+</div>
 <div style="text-align: center;">
     <ul class="navbar">
         <li class="nav-link fs-2 fw-medium" style="color:black;">
@@ -45,7 +47,7 @@
                     <td>@linkList[j].expiresOn</td>
                     <td>@linkList[j].waitTime</td>
                     <td>@linkList[j].description</td>
-                    <td><button @onclick=@(()=>clip.WriteTextAsync(Main.url+linkList[j].shortLink)) id="button-green">Kopyala</button></td>
+                    <td><button @onclick=@(()=>clip.WriteTextAsync(Main.url+linkList[j].shortLink)) id="button-fıstık-tablo">Kopyala</button></td>
                     <td><button @onclick=@(()=>clip.WriteTextAsync(linkList[j].url)) id="button-orange">Kopyala</button></td>
                     <td><button @onclick=@(async()=>await duzenleClick(true,tempint)) id="button-blue">Düzenle</button></td>
                 </tr>

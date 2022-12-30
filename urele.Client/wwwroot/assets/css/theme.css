@@ -483,20 +483,28 @@ button {
   color: #31AA27;
 }
 
+#button-fıstık-tablo {
+    border-color: #5cd1bb;
+    border-radius: 999px;
+    background-color: #5cd1bb;
+    color: #ffffff;
+    width: 113px;
+}
+
 #button-orange {
-  border-color: #FFF4E4;
-  width: 113px;
-  border-radius: 12px;
-  background-color: #FFF4E4;
-  color: #E99518;
+    border-color: #ffbb56;
+    border-radius: 999px;
+    background-color: #ffbb56;
+    color: #fff;
+    width: 113px;
 }
 
 #button-blue {
-  border-color: #EDEDFE;
-  width: 113px;
-  border-radius: 12px;
-  background-color: #EDEDFE;
-  color: #605DEC;
+    border-color: #9090ff;
+    width: 113px;
+    border-radius: 12px;
+    background-color: #9090ff;
+    color: #fff;
 }
 
 #button-red {
