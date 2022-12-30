@@ -8,12 +8,108 @@
     <a href="index.html"><img src="assets/img/yeniler/mail.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
     <a href="index.html"><img src="assets/img/yeniler/sms.png" width="120px" height="120px"> &nbsp &nbsp &nbsp &nbsp &nbsp</a>
 </div>
-<input class="form-control" style="margin-top:10px" type="text">
-<button id="button-fıstık" style="margin-top: 20px;">Kısalt</button>
+<input class="form-control" style="margin-top:10px" type="text" @bind="@uzunLink">
+<button id="button-fıstık" style="margin-top: 20px;" @onclick=@(async()=>await kisaltClicked())>Kısalt</button>
 
 <!--kutucuk-->
+    @if (messageID == 1)
+    {
+        <p style="color:green">Link Başarıyla Oluşturuldu!</p>
+    }
+    else if(messageID == 2)
+    {
+    <p style="color:red">Link Oluşturma Başarısız Oldu.</p>
+    }
 
+@if (isKutucukOpen == true)
+{
+    @if (isTokenValid)
+    {
+        <Kutucuk ShortLink="@ShortLink" source="/" Token="@Token" />
+    }
+    else
+    {
+        <Kutucuk ShortLink="@ShortLink" source="/"/>
+    }
+}
 
+@inject ILocalStorageService localStore
 @code{
-	
+    string Token = String.Empty;
+    bool isTokenValid = false;
+
+    string uzunLink = "";
+    bool? isKutucukOpen = false;  //True açık, false kapalı, null kapalı ama mesajlı
+
+    int messageID = 0; //0 Yok, 1 Başarılı, 2 = Başarısız
+
+    string ShortLink = String.Empty;
+
+    Types type = Types.Normal;
+
+
+
+
+    public enum Types
+    {
+        Mail, Sms, Telefon, Whatsapp, Normal, Özel
+    }
+
+    protected async Task selectOther(Types t)
+    {
+        type = t;
+    }
+
+    protected override async Task<Task> OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                string token = await localStore.GetItemAsStringAsync("token");
+                if (token != null && token != String.Empty && token.Trim() != "")
+                {
+
+                    var res = await RunHttp.Post<TokenEntity>("User/login/token", new { token = token });
+                    if (res.isSuccess)
+                    {
+                        Token = token;
+                        isTokenValid = true;
+                    }
+                }
+            }
+            catch{}
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected async Task kisaltClicked()
+    {
+        string longLink = uzunLink;
+        if (longLink.Trim().Length < 1)
+        {
+            return;
+        }
+        messageID = 0;
+        var obj = new CreateLinkModel
+        {
+                url = longLink,
+        };
+        if (isTokenValid)
+        {
+            obj.token = Token;
+        }
+        var res = await RunHttp.PutAsString("/Link", obj);
+        if (res.isSuccess)
+        {
+            messageID = 1;
+            ShortLink = res.Result;
+			isKutucukOpen = true;
+        }
+        else
+        {
+			messageID = 2;
+        }
+		await InvokeAsync(StateHasChanged);
+    }
 }
